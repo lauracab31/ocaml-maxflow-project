@@ -65,6 +65,20 @@ let flot_gen g g_resi =
       let flux_calc g e = up_flot g e ((search_flux e) - (search_flux {e with src = e.tgt ; tgt = e.src})) in
 
         e_fold g flux_calc g
-  ;;
+;;
+
+
+let flow_to_string g =
+  gmap g (fun x -> (string_of_int x.flot) ^ "/" ^ (string_of_int x.capacite)) 
+;;
     
+let ff_ope g s p =
+
+  let g_resi = algo_ff g s p in
+
+  let g_flot = flot_gen g g_resi in
+
+  flow_to_string g_flot;;
+;;
+
 

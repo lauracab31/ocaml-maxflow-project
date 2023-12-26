@@ -11,3 +11,5 @@ type flot_node ={
 val min_cap : flot_node arc list option -> int
 
 val flot_init : string graph -> flot_node graph
+
+val ff_ope : string graph -> string graph
