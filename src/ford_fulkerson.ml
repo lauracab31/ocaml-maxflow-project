@@ -38,7 +38,9 @@ let transfo g c =
 
   in 
     flux_evo g c 
-  ;;
+;;
+
+
 
 
 let algo_ff g s p =
@@ -54,7 +56,10 @@ in
 
 let flot_gen g g_resi =
 
-  let up_flot g e acc = new_arc g {e with lbl={flot=(e.lbl.flot - acc);capacite = e.lbl.capacite}} in
+  let up_flot g e acc = 
+    Printf.printf "Flot : %d %!" e.lbl.flot;
+    Printf.printf "Acc : %d %!" acc;
+    new_arc g {e with lbl={flot=(e.lbl.capacite - acc);capacite = e.lbl.capacite}} in
 
     let search_flux e = 
       match find_arc g_resi e.src e.tgt with
@@ -62,7 +67,7 @@ let flot_gen g g_resi =
       | Some a -> a.lbl
     in
 
-      let flux_calc g e = up_flot g e ((search_flux e) - (search_flux {e with src = e.tgt ; tgt = e.src})) in
+      let flux_calc g e = up_flot g e ((search_flux e)) in
 
         e_fold g flux_calc g
 ;;
@@ -76,7 +81,7 @@ let ff_ope g s p =
 
   let g_resi = algo_ff g s p in
 
-  let g_flot = flot_gen g g_resi in
+  let g_flot = flot_gen (flot_init g) g_resi in
 
   flow_to_string g_flot;;
 ;;

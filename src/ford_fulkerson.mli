@@ -8,8 +8,8 @@ type flot_node ={
   capacite : int }
 
 
-val min_cap : flot_node arc list option -> int
+val min_cap : id arc list option -> int
 
 val flot_init : string graph -> flot_node graph
 
-val ff_ope : string graph -> string graph
+val ff_ope : string graph -> id -> id -> string graph

@@ -13,7 +13,7 @@ let find_path g id1 id2 =
 
 
   let rec node_descent g id1 id2 acc =
-    let path_list = out_arcs g id1 in 
+    let path_list = List.filter(fun x->x.lbl>0) (out_arcs g id1) in 
     
       let rec search id acc = function
         |[] -> None
