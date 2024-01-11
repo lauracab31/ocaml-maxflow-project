@@ -35,4 +35,10 @@ let rec print_arclist = function
  |Some (x :: rest) -> Printf.printf "[%d -> %d]%!" x.src x.tgt ; print_arclist (Some rest)
  |Some([]) -> Printf.printf "\n %!"
 
+;;
 
+let rec nb_nodes g acu= 
+  match node_exists g acu with
+    | true -> nb_nodes g (acu+1)
+    | false -> acu
+;;

@@ -1,5 +1,5 @@
 open Gfile
-open Ford_fulkerson
+open Jobs
     
 let () =
 
@@ -27,8 +27,8 @@ let () =
   in
 
   (* Open file *)
-  let graph1 = from_file infile in
-  let gf = ff_ope graph1 _source _sink in
+  let graph1 = jobs_to_record infile in
+  let gf = fst (record_to_graph graph1) in
   (*let graph2 = gmap graph1 int_of_string in
 
   let graph3 = add_arc graph2 0 1 1 in 
