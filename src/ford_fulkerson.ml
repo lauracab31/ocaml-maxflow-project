@@ -9,6 +9,7 @@ type flot_node ={
 
 }
 
+(* Cherche la capacité minimum d'un chemin donné *)
 let min_cap l =
   let rec min_capb l min = match l with
   |None | Some([]) -> min
@@ -18,11 +19,14 @@ let min_cap l =
   min_capb l 99999999
 ;;
 
+(* Initialise un graphe de flots *)
 let flot_init g = gmap g (fun x -> {flot = 0 ; capacite = int_of_string x});;
 
+(* Initialise un graphe résiduel *)
 let resi_init g = gmap g (fun x -> int_of_string x);;
 
 
+(* Fait évoluer le flot en fonction de la capacité minimum *)
 let transfo g c = 
   
   let fm = min_cap (Some c) in
@@ -41,7 +45,7 @@ let transfo g c =
 ;;
 
 
-
+(* Applique l'algorithme de ford_fulkerson *)
 
 let algo_ff g s p =
   let g_resi = resi_init g in 
@@ -54,11 +58,11 @@ in
   boucle g_resi s p
 ;;
 
+(* Génère un graphe de flots à partir d'un graphe résiduel *)
 let flot_gen g g_resi =
 
   let up_flot g e acc = 
-    Printf.printf "Flot : %d %!" e.lbl.flot;
-    Printf.printf "Acc : %d %!" acc;
+
     new_arc g {e with lbl={flot=(e.lbl.capacite - acc);capacite = e.lbl.capacite}} in
 
     let search_flux e = 
@@ -72,11 +76,13 @@ let flot_gen g g_resi =
         e_fold g flux_calc g
 ;;
 
-
+(* Génère un graphe de string à partir d'un graphe de flots *)
 let flow_to_string g =
   gmap g (fun x -> (string_of_int x.flot) ^ "/" ^ (string_of_int x.capacite)) 
 ;;
-    
+
+
+(* Applique l'algorithme à partir d'un string graph et renvoie un string graph avec les flots *)
 let ff_ope g s p =
 
   let g_resi = algo_ff g s p in

@@ -1,16 +1,21 @@
 open Graph
 open Tools
+open Ford_fulkerson
+open Printf
 
+(* Type pour identifier le nom d'une personne ou d'un job à partir d'un id *)
 type matricule = {
   entite : string;
   id : int;
 }
 
+(* Type qui contient une personne et la liste des offres reçues *)
 type person = {
   name : string;
   jobs_list : string list;
 }
 
+(* Convertit un fichier texte contenant les personnes et leurs offres pour obtenir une liste de person *)
 let jobs_to_record fichier =
 
   let infile = open_in fichier in
@@ -38,6 +43,7 @@ let jobs_to_record fichier =
   res
 ;;
 
+(* Génère à partir d'une liste de person, un tuple contenant un graphe d'association et une liste contenant les associations id-noms *)
 let record_to_graph list =
 
   let graph = empty_graph in 
@@ -64,7 +70,7 @@ let record_to_graph list =
         | [] -> (g,c)
         | x::rest -> begin 
                     try 
-                      let x = List.find (fun a -> a.entite=x) c in 
+                      let x = List.find (fun a -> a.entite=x) c in (* Applique l'algorithme de ford_fulkerson *)
                       add_jobs (new_arc g {src=idp;tgt=x.id;lbl="1"}) rest c idp
 
 
@@ -90,5 +96,21 @@ let record_to_graph list =
 
 ;;
 
+(* Applique l'algorithme de Ford-Fulkerson au graphe et écrit dans un fichier les éventuelles affectations pour chaque personne *)
+let output_file (graph,cor) fichier =
 
+  let res = ff_ope graph 0 1 in 
 
+  let affectation file e = if e.src > 1 && e.tgt > 1 && e.lbl = "1/1" then fprintf file "%s : %s \n\n" (List.find (fun i->i.id = e.src) cor).entite (List.find (fun i->i.id = e.tgt) cor).entite 
+    
+  else if e.src = 0 && e.lbl = "0/1" then fprintf file "%s : sans emploi \n\n" (List.find (fun i->i.id = e.tgt) cor).entite 
+  
+  in 
+
+  let ff = open_out fichier in 
+
+  e_iter res (affectation ff);
+
+  close_out ff
+
+;;

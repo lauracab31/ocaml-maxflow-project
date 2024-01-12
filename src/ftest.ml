@@ -1,4 +1,3 @@
-open Gfile
 open Jobs
     
 let () =
@@ -28,14 +27,14 @@ let () =
 
   (* Open file *)
   let graph1 = jobs_to_record infile in
-  let gf = fst (record_to_graph graph1) in
+  let gf = record_to_graph graph1 in
   (*let graph2 = gmap graph1 int_of_string in
 
   let graph3 = add_arc graph2 0 1 1 in 
 
   let graph4 = gmap graph3 string_of_int in*)
   (* Rewrite the graph that has been read. *)
-  let () = export outfile gf in                     (*export outfile graph1 in*)
+  let () = output_file gf outfile in                     (*export outfile graph1 in*)
 
   ()
 
